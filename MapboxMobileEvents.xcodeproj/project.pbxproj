@@ -302,6 +302,10 @@
 		9C65A2762256C112006E3FED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C65A2772256C112006E3FED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9C65A27C2256C175006E3FED /* MMETestHost.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MMETestHost.entitlements; sourceTree = "<group>"; };
+		9C65A2852257289A006E3FED /* check_binary_size.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = check_binary_size.sh; sourceTree = "<group>"; };
+		9C65A2862257289A006E3FED /* publish_to_aws.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = publish_to_aws.sh; sourceTree = "<group>"; };
+		9C65A2872257289A006E3FED /* package.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = package.sh; sourceTree = "<group>"; };
+		9C65A2882257289A006E3FED /* publish_to_sizechecker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = publish_to_sizechecker.js; sourceTree = "<group>"; };
 		9C6D9881221F369000679292 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
 		9C6D9883221F37FA00679292 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		9C6D9884221F37FA00679292 /* codecov.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = codecov.yml; sourceTree = "<group>"; };
@@ -392,10 +396,11 @@
 				404807BB1EA186D8008A6D50 /* MapboxMobileEvents */,
 				404807C61EA186D8008A6D50 /* MapboxMobileEventsTests */,
 				408596701ED08FF7003BD29D /* resources */,
-				9C6D9882221F37A200679292 /* Packaging */,
 				9C65A2672256C110006E3FED /* MMETestHost */,
-				404807BA1EA186D8008A6D50 /* Products */,
 				4032F47C1F1FEDC6001C1FBD /* Frameworks */,
+				9C6D9882221F37A200679292 /* Packaging */,
+				404807BA1EA186D8008A6D50 /* Products */,
+				9C65A2842257289A006E3FED /* scripts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -584,6 +589,17 @@
 				9C65A2772256C112006E3FED /* main.m */,
 			);
 			path = MMETestHost;
+			sourceTree = "<group>";
+		};
+		9C65A2842257289A006E3FED /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				9C65A2852257289A006E3FED /* check_binary_size.sh */,
+				9C65A2862257289A006E3FED /* publish_to_aws.sh */,
+				9C65A2872257289A006E3FED /* package.sh */,
+				9C65A2882257289A006E3FED /* publish_to_sizechecker.js */,
+			);
+			path = scripts;
 			sourceTree = "<group>";
 		};
 		9C6D9882221F37A200679292 /* Packaging */ = {
@@ -1216,7 +1232,7 @@
 					"-fcxx-modules",
 					"-fmodules",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxMobileMetricsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxMobileEventsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MMETestHost.app/MMETestHost";
 			};
@@ -1238,7 +1254,7 @@
 					"-fcxx-modules",
 					"-fmodules",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxMobileMetricsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxMobileEventsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MMETestHost.app/MMETestHost";
 			};
