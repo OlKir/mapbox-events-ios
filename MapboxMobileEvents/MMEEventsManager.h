@@ -9,7 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*! @brief Mapbox Mobile Events Manager */
 @interface MMEEventsManager : NSObject
 
-/*! @brief delegate */
+/*! @brief events manager delegate */
 @property (nonatomic, weak) id<MMEEventsManagerDelegate> delegate;
 
 /*! @brief YES if metrics collection is enabled */

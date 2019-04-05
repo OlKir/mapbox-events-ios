@@ -17,7 +17,6 @@
 #import "MMELocationManager.h"
 #import "MMEMetricsManager.h"
 #import "MMETimerManager.h"
-#import "MMETypes.h"
 #import "MMEUIApplicationWrapper.h"
 #import "MMEUniqueIdentifier.h"
 

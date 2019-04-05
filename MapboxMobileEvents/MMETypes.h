@@ -22,7 +22,3 @@
 
 typedef NS_DICTIONARY_OF(NSString *, id) MMEMapboxEventAttributes;
 typedef NS_MUTABLE_DICTIONARY_OF(NSString *, id) MMEMutableMapboxEventAttributes;
-
-@interface MMETypes : NSObject
-
-@end
