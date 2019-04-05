@@ -1,22 +1,25 @@
-#import "MMEEventsManager.h"
-#import "MMEEvent.h"
-#import "MMELocationManager.h"
-#import "MMEUniqueIdentifier.h"
-#import "MMECommonEventData.h"
-#import "MMEConstants.h"
-#import "MMEAPIClient.h"
-#import "MMEEventLogger.h"
-#import "MMEEventsConfiguration.h"
-#import "MMEConfigurator.h"
-#import "MMETimerManager.h"
-#import "MMEDispatchManager.h"
-#import "MMEUIApplicationWrapper.h"
-#import "MMEDate.h"
-#import "MMECategoryLoader.h"
+#import <CoreLocation/CoreLocation.h>
+
 #import "CLLocation+MMEMobileEvents.h"
 #import "CLLocationManager+MMEMobileEvents.h"
+
+#import "MMEAPIClient.h"
+#import "MMECategoryLoader.h"
+#import "MMECommonEventData.h"
+#import "MMEConfigurator.h"
+#import "MMEConstants.h"
+#import "MMEDate.h"
+#import "MMEDispatchManager.h"
+#import "MMEEvent.h"
+#import "MMEEventLogger.h"
+#import "MMEEventsConfiguration.h"
+#import "MMEEventsManager.h"
+#import "MMELocationManager.h"
 #import "MMEMetricsManager.h"
-#import <CoreLocation/CoreLocation.h>
+#import "MMETimerManager.h"
+#import "MMETypes.h"
+#import "MMEUIApplicationWrapper.h"
+#import "MMEUniqueIdentifier.h"
 
 @interface MMEEventsManager () <MMELocationManagerDelegate, MMEConfiguratorDelegate>
 
