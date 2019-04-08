@@ -103,9 +103,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*! @brief displayLogFileFromDate:...
     @param logDate earliest date to display log information for
-    @note TO BE DEPRICATED
+    @note to be deprecated
 */
 - (void)displayLogFileFromDate:(NSDate *)logDate;
+
+#pragma mark - Error & Exception Reporting
+
+- (void)reportError:(NSError *)eventsError;
+
+- (void)reportException:(NSException *)eventException;
 
 @end
 
@@ -116,19 +122,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-/*! @brief eventsManager:...
- @param eventsManager shared manager
- @param locations array of CLLocations
- */
+/*! @brief eventsManager:didUpdateLocations: reports location updates to the delegate
+    @param eventsManager shared manager
+    @param locations array of CLLocations
+*/
 - (void)eventsManager:(MMEEventsManager *)eventsManager didUpdateLocations:(NSArray<CLLocation *> *)locations;
 
 #if TARGET_OS_IOS
-/*! @brief eventsManager:...
- @param eventsManager shared manager
- @param visit CLVisit
- */
+/*! @brief eventsManager:didVisit: reports visits to the delegate
+    @param eventsManager shared manager
+    @param visit CLVisit
+*/
 - (void)eventsManager:(MMEEventsManager *)eventsManager didVisit:(CLVisit *)visit;
 #endif
+
+/** @brief eventsManager:didEncouterError: reports errors encoutered by the Events Manager to the delegate
+    @param eventsManager the shared events manager
+    @param error the encountered NSError object
+*/
+- (void)eventsManager:(MMEEventsManager *)eventsManager didEncounterError:(NSError *)error;
 
 @end
 

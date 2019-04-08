@@ -463,6 +463,26 @@
     return [MMEEventLogger.sharedLogger isEnabled];
 }
 
+#pragma mark - Error & Exception Reporting
+
+- (void)reportError:(NSError *)eventsError {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(eventsManager:didEncounterError:)]) {
+        [self.delegate eventsManager:self didEncounterError:eventsError];
+    }
+    else { // debug log?
+
+    }
+}
+
+- (void)reportException:(NSException *)exception {
+    NSError *exceptionalError = [NSError errorWithDomain:MMEErrorDomain code:MMEErrorException userInfo:@{
+        MMEErrorDescriptionKey: @"Exception Reported",
+        MMEErrorUnderlyingExceptionKey: exception
+    }];
+    
+    [self reportError:exceptionalError];
+}
+
 #pragma mark - Internal API
 
 - (BOOL)isEnabled {

@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import <MapboxMobileEvents/MMETypes.h>
 
 extern NSString * const MMEAPIClientBaseURL;
 extern NSString * const MMEAPIClientBaseAPIURL;
@@ -14,7 +15,6 @@ extern NSString * const MMEAPIClientAttachmentsHeaderFieldContentTypeValue;
 extern NSString * const MMEAPIClientHeaderFieldContentEncodingKey;
 extern NSString * const MMEAPIClientHTTPMethodPost;
 extern NSString * const MMEAPIClientHTTPMethodGet;
-extern NSString * const MMEErrorDomain;
 
 // Debug types
 extern NSString * const MMEDebugEventType;
@@ -133,13 +133,37 @@ extern NSString * const MMEEventUnknown;
 
 extern NSString * const MMEResponseKey;
 
-// SDK event source
+/*! @brief SDK event source */
 extern NSString * const MMEEventSource;
 
-// Log reporter HTML
-extern NSString * const MMELoggerHTML;
-extern NSString * const MMELoggerShareableHTML;
+#pragma mark - MMEErrorDomain
 
-@interface MMEConstants: NSObject
+/*! @brief NSErrorDomain for MapboxMobileEvents */
+extern NSErrorDomain const MMEErrorDomain;
 
-@end
+/*! @brief MMEErrorDomain No Error Code */
+extern NSInteger const MMENoError;
+
+/*! @brief MMEErrorDomain Min Error Code */
+extern NSInteger const MMEErrorMin;
+
+/*! @brief MMEErrorDomain Error Code for exceptions */
+extern NSInteger const MMEErrorException;
+
+/*! @brief MMEErrorDomain Error Code for intilizing events */
+extern NSInteger const MMEErrorEventInit;
+
+/*! @brief key for MMEErrorDomain userInfo dictionary containing the description of the error */
+extern NSString * const MMEErrorDescriptionKey;
+
+/*! @brief key for MMEErrorEventInit userInfo dictionary containing the attributes which failed to create the event */
+extern NSString * const MMEErrorEventAttributesKey;
+
+/*! @brief key for MMEErrorDomain userInfo dictionary containing the underlying exception which triggered the error */
+extern NSString * const MMEErrorUnderlyingExceptionKey;
+
+#pragma mark - Deprecated (HTML Logger)
+
+extern NSString * const MMELoggerHTML MBE_DEPRECATED;
+extern NSString * const MMELoggerShareableHTML MBE_DEPRECATED;
+

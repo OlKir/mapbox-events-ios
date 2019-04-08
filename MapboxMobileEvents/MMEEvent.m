@@ -3,206 +3,192 @@
 #import "MMEConstants.h"
 #import "MMECommonEventData.h"
 #import "MMEReachability.h"
+#import "MMEEventsManager.h"
 
 #if TARGET_OS_IOS || TARGET_OS_TVOS
 #import <UIKit/UIKit.h>
 #endif
 
+@interface MMEEvent ()
+@property(nonatomic,retain) MMEDate *dateStorage;
+@property(nonatomic,retain) NSDictionary *attributesStorage;
+
+@end
+
+#pragma mark -
+
 @implementation MMEEvent
 
-+ (instancetype)eventWithDate:(MMEDate *)eventDate name:(NSString *)eventName attributes:(NSDictionary *)attributes {
-    return [MMEEvent.alloc initWithDate:eventDate name:eventName attributes:attributes];
+#pragma mark - Generic Events
+
++ (instancetype)eventWithAttributes:(NSDictionary *)attributes {
+    NSError *eventError = nil;
+    MMEEvent *newEvent = [MMEEvent eventWithAttributes:attributes error:&eventError];
+    if (eventError != nil) {
+        [MMEEventsManager.sharedManager reportError:eventError];
+    }
+
+    return newEvent;
+}
+
++ (instancetype)eventWithAttributes:(NSDictionary *)attributes error:(NSError **)error {
+    return [MMEEvent.alloc initWithAttributes:attributes error:error];
+}
+
+#pragma mark - Custom Events
+
++ (instancetype)turnstileEventWithAttributes:(NSDictionary *)attributes {
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeAppUserTurnstile;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
+}
+
++ (instancetype)visitEventWithAttributes:(NSDictionary *)attributes {
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeVisit;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
+}
+
++ (instancetype)debugEventWithAttributes:(NSDictionary *)attributes {
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeLocalDebug;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
+}
+
++ (instancetype)debugEventWithError:(NSError*) error {
+    NSMutableDictionary* eventAttributes = [NSMutableDictionary dictionaryWithObject:MMEDebugEventTypeError forKey:MMEDebugEventType];
+    eventAttributes[MMEEventKeyErrorCode] = @(error.code);
+    eventAttributes[MMEEventKeyErrorDescription] = (error.localizedDescription ? error.localizedDescription : error.description);
+    eventAttributes[MMEEventKeyErrorFailureReason] = (error.localizedFailureReason ? error.localizedFailureReason : MMEEventKeyErrorNoReason);
+
+    return [self debugEventWithAttributes:eventAttributes];
+}
+
++ (instancetype)debugEventWithException:(NSException*) except {
+    NSMutableDictionary* eventAttributes = [NSMutableDictionary dictionaryWithObject:MMEDebugEventTypeError forKey:MMEDebugEventType];
+    eventAttributes[MMEEventKeyErrorDescription] = except.name;
+    eventAttributes[MMEEventKeyErrorFailureReason] = (except.reason ? except.reason : MMEEventKeyErrorNoReason);
+
+    return [self debugEventWithAttributes:eventAttributes];
+}
+
+#pragma mark - Deperecated
+
++ (instancetype)eventWithDate:(NSDate *)eventDate name:(NSString *)eventName attributes:(NSDictionary *)attributes {
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyCreated] = [MMEDate.iso8601DateFormatter stringFromDate:eventDate];
+    eventAttributes[MMEEventKeyEvent] = eventName;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)eventWithName:(NSString *)eventName attributes:(NSDictionary *)attributes {
     return [MMEEvent eventWithDate:MMEDate.date name:eventName attributes:attributes];
 }
 
-+ (instancetype)turnstileEventWithAttributes:(NSDictionary *)attributes {
-    MMEEvent *turnstileEvent = [[MMEEvent alloc] init];
-    turnstileEvent.name = MMEEventTypeAppUserTurnstile;
-    turnstileEvent.attributes = attributes;
-    return turnstileEvent;
-}
-
 + (instancetype)telemetryMetricsEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes {
-    MMEEvent *telemetryMetrics = [[MMEEvent alloc] init];
-    telemetryMetrics.name = MMEEventTypeTelemetryMetrics;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = telemetryMetrics.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    telemetryMetrics.attributes = commonAttributes;
-    return telemetryMetrics;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeTelemetryMetrics;
+    eventAttributes[MMEEventKeyCreated] = dateString;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)locationEventWithAttributes:(NSDictionary *)attributes instanceIdentifer:(NSString *)instanceIdentifer commonEventData:(MMECommonEventData *)commonEventData {
-
-    MMEEvent *locationEvent = [[MMEEvent alloc] init];
-    locationEvent.name = MMEEventTypeLocation;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = locationEvent.name;
-    commonAttributes[MMEEventKeySource] = MMEEventSource;
-    commonAttributes[MMEEventKeySessionId] = instanceIdentifer;
-    commonAttributes[MMEEventKeyOperatingSystem] = commonEventData.osVersion;
-    NSString *applicationState = [commonEventData applicationState];
-    if (![applicationState isEqualToString:MMEApplicationStateUnknown]) {
-        commonAttributes[MMEEventKeyApplicationState] = applicationState;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeLocation;
+    eventAttributes[MMEEventKeySource] = MMEEventSource;
+    eventAttributes[MMEEventKeySessionId] = instanceIdentifer;
+    eventAttributes[MMEEventKeyOperatingSystem] = commonEventData.osVersion;
+    if (![commonEventData.applicationState isEqualToString:MMEApplicationStateUnknown]) {
+        eventAttributes[MMEEventKeyApplicationState] = commonEventData.applicationState;
     }
-    [commonAttributes addEntriesFromDictionary:attributes];
-    locationEvent.attributes = commonAttributes;
-    return locationEvent;
-}
 
-+ (instancetype)visitEventWithAttributes:(NSDictionary *)attributes {
-    MMEEvent *visitEvent = [[MMEEvent alloc] init];
-    visitEvent.name = MMEEventTypeVisit;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = visitEvent.name;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    visitEvent.attributes = commonAttributes;
-    return visitEvent;
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)mapLoadEventWithDateString:(NSString *)dateString commonEventData:(MMECommonEventData *)commonEventData {
-    MMEEvent *mapLoadEvent = [[MMEEvent alloc] init];
-    mapLoadEvent.name = MMEEventTypeMapLoad;
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    attributes[MMEEventKeyEvent] = mapLoadEvent.name;
-    attributes[MMEEventKeyCreated] = dateString;
-    attributes[MMEEventKeyVendorID] = commonEventData.vendorId;
-    attributes[MMEEventKeyModel] = commonEventData.model;
-    attributes[MMEEventKeyOperatingSystem] = commonEventData.osVersion;
-    attributes[MMEEventKeyResolution] = @(commonEventData.scale);
+    NSMutableDictionary *eventAttributes = NSMutableDictionary.dictionary;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeMapLoad;
+    eventAttributes[MMEEventKeyCreated] = dateString;
+    eventAttributes[MMEEventKeyVendorID] = commonEventData.vendorId;
+    eventAttributes[MMEEventKeyModel] = commonEventData.model;
+    eventAttributes[MMEEventKeyOperatingSystem] = commonEventData.osVersion;
+    eventAttributes[MMEEventKeyResolution] = @(commonEventData.scale);
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    attributes[MMEEventKeyAccessibilityFontScale] = @([self contentSizeScale]);
-    attributes[MMEEventKeyOrientation] = [self deviceOrientation];
+    eventAttributes[MMEEventKeyAccessibilityFontScale] = @(self.contentSizeScale);
+    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
 #endif
-    attributes[MMEEventKeyWifi] = @([[MMEReachability reachabilityForLocalWiFi] isReachableViaWiFi]);
-    mapLoadEvent.attributes = attributes;
-    return mapLoadEvent;
+    eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)mapTapEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes {
-    MMEEvent *mapTapEvent = [[MMEEvent alloc] init];
-    mapTapEvent.name = MMEEventTypeMapTap;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = mapTapEvent.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeMapTap;
+    eventAttributes[MMEEventKeyCreated] = dateString;
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    commonAttributes[MMEEventKeyOrientation] = [self deviceOrientation];
+    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
 #endif
-    commonAttributes[MMEEventKeyWifi] = @([[MMEReachability reachabilityForLocalWiFi] isReachableViaWiFi]);
-    [commonAttributes addEntriesFromDictionary:attributes];
-    mapTapEvent.attributes = commonAttributes;
-    return mapTapEvent;
+    eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)mapDragEndEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes {
-    MMEEvent *mapTapEvent = [[MMEEvent alloc] init];
-    mapTapEvent.name = MMEEventTypeMapDragEnd;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = mapTapEvent.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEEventTypeMapDragEnd;
+    eventAttributes[MMEEventKeyCreated] = dateString;
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    commonAttributes[MMEEventKeyOrientation] = [self deviceOrientation];
+    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
 #endif
-    commonAttributes[MMEEventKeyWifi] = @([[MMEReachability reachabilityForLocalWiFi] isReachableViaWiFi]);
-    [commonAttributes addEntriesFromDictionary:attributes];
-    mapTapEvent.attributes = commonAttributes;
-    return mapTapEvent;
+    eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)mapOfflineDownloadStartEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes {
-    MMEEvent *mapOfflineDownloadEvent = [[MMEEvent alloc] init];
-    mapOfflineDownloadEvent.name = MMEventTypeOfflineDownloadStart;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = mapOfflineDownloadEvent.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    mapOfflineDownloadEvent.attributes = commonAttributes;
-    return mapOfflineDownloadEvent;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEventTypeOfflineDownloadStart;
+    eventAttributes[MMEEventKeyCreated] = dateString;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)mapOfflineDownloadEndEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes {
-    MMEEvent *mapOfflineDownloadEvent = [[MMEEvent alloc] init];
-    mapOfflineDownloadEvent.name = MMEventTypeOfflineDownloadEnd;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = mapOfflineDownloadEvent.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    mapOfflineDownloadEvent.attributes = commonAttributes;
-    return mapOfflineDownloadEvent;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = MMEventTypeOfflineDownloadEnd;
+    eventAttributes[MMEEventKeyCreated] = dateString;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 + (instancetype)navigationEventWithName:(NSString *)name attributes:(NSDictionary *)attributes {
-    MMEEvent *navigationEvent = [[MMEEvent alloc] init];
-    navigationEvent.name = name;
-    navigationEvent.attributes = attributes;
-    return navigationEvent;
+    return [MMEEvent eventWithName:name attributes:attributes];
 }
 
 + (instancetype)visionEventWithName:(NSString *)name attributes:(NSDictionary *)attributes {
-    MMEEvent *visionEvent = [[MMEEvent alloc] init];
-    visionEvent.name = name;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = visionEvent.name;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    visionEvent.attributes = commonAttributes;
-    return visionEvent;
-}
-
-+ (instancetype)debugEventWithAttributes:(NSDictionary *)attributes {
-    MMEEvent *debugEvent = [[MMEEvent alloc] init];
-    debugEvent.name = MMEEventTypeLocalDebug;
-    debugEvent.attributes = [attributes copy];
-    return debugEvent;
-}
-
-+ (instancetype)debugEventWithError:(NSError*) error {
-    NSMutableDictionary* errorAttributes = [NSMutableDictionary dictionaryWithObject:MMEDebugEventTypeError forKey:MMEDebugEventType];
-    errorAttributes[MMEEventKeyErrorCode] = @(error.code);
-    errorAttributes[MMEEventKeyErrorDescription] = (error.localizedDescription ? error.localizedDescription : error.description);
-    errorAttributes[MMEEventKeyErrorFailureReason] = (error.localizedFailureReason ? error.localizedFailureReason : MMEEventKeyErrorNoReason);
-    return [self debugEventWithAttributes:errorAttributes];
-}
-
-+ (instancetype)debugEventWithException:(NSException*) except {
-    NSMutableDictionary* exceptionAttributes = [NSMutableDictionary dictionaryWithObject:MMEDebugEventTypeError forKey:MMEDebugEventType];
-    exceptionAttributes[MMEEventKeyErrorDescription] = except.name;
-    exceptionAttributes[MMEEventKeyErrorFailureReason] = (except.reason ? except.reason : MMEEventKeyErrorNoReason);
-    return [self debugEventWithAttributes:exceptionAttributes];
+    return [MMEEvent eventWithName:name attributes:attributes];
 }
 
 + (instancetype)searchEventWithName:(NSString *)name attributes:(NSDictionary *)attributes {
-    MMEEvent *searchEvent = [[MMEEvent alloc] init];
-    searchEvent.name = name;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = searchEvent.name;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    searchEvent.attributes = commonAttributes;
-    return searchEvent;
+    return [MMEEvent eventWithName:name attributes:attributes];
 }
 
 + (instancetype)carplayEventWithName:(NSString *)name attributes:(NSDictionary *)attributes {
-    MMEEvent *carplayEvent = [[MMEEvent alloc] init];
-    carplayEvent.name = name;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = carplayEvent.name;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    carplayEvent.attributes = commonAttributes;
-    return carplayEvent;
+    return [MMEEvent eventWithName:name attributes:attributes];
 }
 
 + (instancetype)eventWithDateString:(NSString *)dateString name:(NSString *)name attributes:(NSDictionary *)attributes {
-    MMEEvent *event = [[MMEEvent alloc] init];
-    event.name = name;
-    NSMutableDictionary *commonAttributes = [NSMutableDictionary dictionary];
-    commonAttributes[MMEEventKeyEvent] = event.name;
-    commonAttributes[MMEEventKeyCreated] = dateString;
-    [commonAttributes addEntriesFromDictionary:attributes];
-    event.attributes = commonAttributes;
-    return event;
+    NSMutableDictionary *eventAttributes = attributes.mutableCopy;
+    eventAttributes[MMEEventKeyEvent] = name;
+    eventAttributes[MMEEventKeyCreated] = dateString;
+
+    return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
 #pragma mark - AppKit
@@ -280,17 +266,68 @@
     return YES;
 }
 
-#pragma mark -
+#pragma mark - Designated Initilizer
 
-- (instancetype) initWithDate:(MMEDate *)eventDate name:(NSString *)eventName  attributes:(NSDictionary *)eventAttributes {
-    if (self = [super init]) {
-        _date = eventDate.copy;
-        _name = eventName.copy;
-        _attributes = eventAttributes.copy;
+- (instancetype)initWithAttributes:(NSDictionary *)eventAttributes error:(NSError **)error {
+    if ([NSJSONSerialization isValidJSONObject:eventAttributes]) {
+        if (![eventAttributes.allKeys containsObject:MMEEventKeyEvent]) { // requried
+            *error = [NSError errorWithDomain:MMEErrorDomain code:MMEErrorEventInit userInfo:@{
+                MMEErrorDescriptionKey: @"eventAttributes does not contain MMEEventKeyEvent",
+                MMEErrorEventAttributesKey: eventAttributes
+            }];
+            self = nil;
+            goto exit;
+        }
+        else if (self = [super init]) {
+            @try {
+                _dateStorage = MMEDate.date;
+                NSMutableDictionary* eventAttributesStorage = [eventAttributes mutableCopy];
+
+                if (![eventAttributesStorage.allKeys containsObject:MMEEventKeyCreated]) {
+                    eventAttributesStorage[MMEEventKeyCreated] = [MMEDate.iso8601DateFormatter stringFromDate:_dateStorage];
+                }
+
+                self.attributesStorage = eventAttributesStorage;
+            }
+            @catch(NSException* eventAttributesException) {
+                *error = [NSError errorWithDomain:MMEErrorDomain code:MMEErrorEventInit userInfo:@{
+                    MMEErrorDescriptionKey: @"exception processing eventAttributes",
+                    MMEErrorUnderlyingExceptionKey: eventAttributesException,
+                    MMEErrorEventAttributesKey: eventAttributes
+                }];
+                self = nil;
+                goto exit;
+            }
+        }
+    }
+    else {
+        *error = [NSError errorWithDomain:MMEErrorDomain code:MMEErrorEventInit userInfo:@{
+            MMEErrorDescriptionKey: @"eventAttributes is not a valid JSON Object",
+            MMEErrorEventAttributesKey: eventAttributes
+        }];
+        self = nil;
+        goto exit;
     }
 
+exit:
     return self;
 }
+
+#pragma mark - Properties
+
+- (NSDate *)date {
+    return [_dateStorage copy];
+}
+
+- (NSString *)name {
+    return [_attributesStorage[MMEEventKeyEvent] copy];
+}
+
+- (NSDictionary *)attributes {
+    return [NSDictionary dictionaryWithDictionary:_attributesStorage];
+}
+
+#pragma mark - MMEEvent
 
 - (BOOL)isEqualToEvent:(MMEEvent *)event {
     if (!event) {
@@ -331,15 +368,15 @@
 
 - (id)copyWithZone:(NSZone *)zone {
     MMEEvent *copy = [MMEEvent new];
-    copy.name = self.name;
-    copy.date = self.date;
-    copy.attributes = self.attributes;
+    copy.dateStorage = self.dateStorage.copy;
+    copy.attributesStorage = self.attributesStorage.copy;
     return copy;
 }
 
 #pragma mark - NSCoding
 
-static NSInteger const MMEEventVersion1 = 1;
+static NSInteger const MMEEventVersion1 = 1; // Name, Date & Attributes Dictionary
+static NSInteger const MMEEventVersion2 = 2; // Date * Attributes Dictionary
 static NSString * const MMEEventVersionKey = @"MMEEventVersion";
 static NSString * const MMEEventNameKey = @"MMEEventName";
 static NSString * const MMEEventDateKey = @"MMEEventDate";
@@ -347,11 +384,10 @@ static NSString * const MMEEventAttributesKey = @"MMEEventAttributes";
 
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super init]) {
+    if (self = [self init]) {
         NSInteger encodedVersion = [aDecoder decodeIntegerForKey:MMEEventVersionKey];
-        _name = [aDecoder decodeObjectOfClass:NSString.class forKey:MMEEventNameKey];
-        _date = [aDecoder decodeObjectOfClass:MMEDate.class forKey:MMEEventDateKey];
-        _attributes = [aDecoder decodeObjectOfClass:NSDictionary.class forKey:MMEEventAttributesKey];
+        _dateStorage = [aDecoder decodeObjectOfClass:MMEDate.class forKey:MMEEventDateKey];
+        _attributesStorage = [aDecoder decodeObjectOfClass:NSDictionary.class forKey:MMEEventAttributesKey];
         if (encodedVersion > MMEEventVersion1) {
             NSLog(@"%@ WARNING encodedVersion %li > MMEEventVersion %li",
                 NSStringFromClass(self.class), (long)encodedVersion, (long)MMEEventVersion1);
@@ -362,9 +398,8 @@ static NSString * const MMEEventAttributesKey = @"MMEEventAttributes";
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_name forKey:MMEEventNameKey];
-    [aCoder encodeObject:_date forKey:MMEEventDateKey];
-    [aCoder encodeObject:_attributes forKey:MMEEventAttributesKey];
+    [aCoder encodeObject:_dateStorage forKey:MMEEventDateKey];
+    [aCoder encodeObject:_attributesStorage forKey:MMEEventAttributesKey];
     [aCoder encodeInteger:MMEEventVersion1 forKey:MMEEventVersionKey];
 }
 
