@@ -72,7 +72,7 @@ NSString * const MMEApplicationStateUnknown = @"Unknown";
     NSString *result;
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
         result = MMEEventKeyiOS;
-    #elif TARGET_OS_MAC
+    #elif TARGET_OS_MACOS
         result = MMEEventKeyMac;
     #else
         result = MMEEventUnknown;

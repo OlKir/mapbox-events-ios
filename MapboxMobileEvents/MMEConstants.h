@@ -136,6 +136,21 @@ extern NSString * const MMEResponseKey;
 /*! @brief SDK event source */
 extern NSString * const MMEEventSource;
 
+#pragma mark - mobile.crash Keys
+
+extern NSString * const MMEEventMobileCrash;
+extern NSString * const MMEEventKeyOSVersion;
+extern NSString * const MMEEventKeyBuildType;
+extern NSString * const MMEEventKeyIsSilentCrash;
+extern NSString * const MMEEventKeyStackTrace;
+extern NSString * const MMEEventKeyStackTraceHash;
+extern NSString * const MMEEventKeyInstallationID;
+extern NSString * const MMEEventKeyThreadDetails;
+extern NSString * const MMEEventKeyAppID;
+extern NSString * const MMEEventKeyAppVersion;
+extern NSString * const MMEEventKeyAppStartDate;
+extern NSString * const MMEEventKeyCustomData;
+
 #pragma mark - MMEErrorDomain
 
 /*! @brief NSErrorDomain for MapboxMobileEvents */

@@ -6,7 +6,7 @@
 #import "MMEEventsManager.h"
 
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-#import <UIKit/UIKit.h>
+#import "UIKit+MMEMobileEvents.h"
 #endif
 
 @interface MMEEvent ()
@@ -119,8 +119,8 @@
     eventAttributes[MMEEventKeyOperatingSystem] = commonEventData.osVersion;
     eventAttributes[MMEEventKeyResolution] = @(commonEventData.scale);
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    eventAttributes[MMEEventKeyAccessibilityFontScale] = @(self.contentSizeScale);
-    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
+    eventAttributes[MMEEventKeyAccessibilityFontScale] = @(UIApplication.sharedApplication.mme_contentSizeScale);
+    eventAttributes[MMEEventKeyOrientation] = UIDevice.currentDevice.mme_deviceOrientation;
 #endif
     eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
 
@@ -132,7 +132,7 @@
     eventAttributes[MMEEventKeyEvent] = MMEEventTypeMapTap;
     eventAttributes[MMEEventKeyCreated] = dateString;
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
+    eventAttributes[MMEEventKeyOrientation] = UIDevice.currentDevice.mme_deviceOrientation;
 #endif
     eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
 
@@ -144,7 +144,7 @@
     eventAttributes[MMEEventKeyEvent] = MMEEventTypeMapDragEnd;
     eventAttributes[MMEEventKeyCreated] = dateString;
 #if TARGET_OS_IOS || TARGET_OS_TVOS
-    eventAttributes[MMEEventKeyOrientation] = self.deviceOrientation;
+    eventAttributes[MMEEventKeyOrientation] = UIDevice.currentDevice.mme_deviceOrientation;
 #endif
     eventAttributes[MMEEventKeyWifi] = @(MMEReachability.reachabilityForLocalWiFi.isReachableViaWiFi);
 
@@ -191,75 +191,6 @@
     return [MMEEvent eventWithAttributes:eventAttributes];
 }
 
-#pragma mark - AppKit
-
-#if TARGET_OS_IOS || TARGET_OS_TVOS
-+ (NSInteger)contentSizeScale {
-    NSInteger result = -9999;
-    
-    NSString *sc = [UIApplication sharedApplication].preferredContentSizeCategory;
-    
-    if ([sc isEqualToString:UIContentSizeCategoryExtraSmall]) {
-        result = -3;
-    } else if ([sc isEqualToString:UIContentSizeCategorySmall]) {
-        result = -2;
-    } else if ([sc isEqualToString:UIContentSizeCategoryMedium]) {
-        result = -1;
-    } else if ([sc isEqualToString:UIContentSizeCategoryLarge]) {
-        result = 0;
-    } else if ([sc isEqualToString:UIContentSizeCategoryExtraLarge]) {
-        result = 1;
-    } else if ([sc isEqualToString:UIContentSizeCategoryExtraExtraLarge]) {
-        result = 2;
-    } else if ([sc isEqualToString:UIContentSizeCategoryExtraExtraExtraLarge]) {
-        result = 3;
-    } else if ([sc isEqualToString:UIContentSizeCategoryAccessibilityMedium]) {
-        result = -11;
-    } else if ([sc isEqualToString:UIContentSizeCategoryAccessibilityLarge]) {
-        result = 10;
-    } else if ([sc isEqualToString:UIContentSizeCategoryAccessibilityExtraLarge]) {
-        result = 11;
-    } else if ([sc isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraLarge]) {
-        result = 12;
-    } else if ([sc isEqualToString:UIContentSizeCategoryAccessibilityExtraExtraExtraLarge]) {
-        result = 13;
-    }
-    
-    return result;
-}
-
-+ (NSString *)deviceOrientation {
-    NSString *result;
-    switch ([UIDevice currentDevice].orientation) {
-        case UIDeviceOrientationUnknown:
-            result = @"Unknown";
-            break;
-        case UIDeviceOrientationPortrait:
-            result = @"Portrait";
-            break;
-        case UIDeviceOrientationPortraitUpsideDown:
-            result = @"PortraitUpsideDown";
-            break;
-        case UIDeviceOrientationLandscapeLeft:
-            result = @"LandscapeLeft";
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            result = @"LandscapeRight";
-            break;
-        case UIDeviceOrientationFaceUp:
-            result = @"FaceUp";
-            break;
-        case UIDeviceOrientationFaceDown:
-            result = @"FaceDown";
-            break;
-        default:
-            result = @"Default - Unknown";
-            break;
-    }
-    return result;
-}
-#endif
-
 #pragma mark - NSSecureCoding
 
 + (BOOL) supportsSecureCoding {
@@ -267,6 +198,10 @@
 }
 
 #pragma mark - Designated Initilizer
+
+- (instancetype)init {
+    return [self initWithAttributes:nil error:nil];
+}
 
 - (instancetype)initWithAttributes:(NSDictionary *)eventAttributes error:(NSError **)error {
     if ([NSJSONSerialization isValidJSONObject:eventAttributes]) {
@@ -376,7 +311,7 @@ exit:
 #pragma mark - NSCoding
 
 static NSInteger const MMEEventVersion1 = 1; // Name, Date & Attributes Dictionary
-static NSInteger const MMEEventVersion2 = 2; // Date * Attributes Dictionary
+static NSInteger const MMEEventVersion2 = 2; // Date & Attributes Dictionary
 static NSString * const MMEEventVersionKey = @"MMEEventVersion";
 static NSString * const MMEEventNameKey = @"MMEEventName";
 static NSString * const MMEEventDateKey = @"MMEEventDate";
@@ -388,7 +323,7 @@ static NSString * const MMEEventAttributesKey = @"MMEEventAttributes";
         NSInteger encodedVersion = [aDecoder decodeIntegerForKey:MMEEventVersionKey];
         _dateStorage = [aDecoder decodeObjectOfClass:MMEDate.class forKey:MMEEventDateKey];
         _attributesStorage = [aDecoder decodeObjectOfClass:NSDictionary.class forKey:MMEEventAttributesKey];
-        if (encodedVersion > MMEEventVersion1) {
+        if (encodedVersion > MMEEventVersion2) {
             NSLog(@"%@ WARNING encodedVersion %li > MMEEventVersion %li",
                 NSStringFromClass(self.class), (long)encodedVersion, (long)MMEEventVersion1);
         }
@@ -400,7 +335,7 @@ static NSString * const MMEEventAttributesKey = @"MMEEventAttributes";
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:_dateStorage forKey:MMEEventDateKey];
     [aCoder encodeObject:_attributesStorage forKey:MMEEventAttributesKey];
-    [aCoder encodeInteger:MMEEventVersion1 forKey:MMEEventVersionKey];
+    [aCoder encodeInteger:MMEEventVersion2 forKey:MMEEventVersionKey];
 }
 
 @end

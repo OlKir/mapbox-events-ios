@@ -1,4 +1,9 @@
 #import <CoreLocation/CoreLocation.h>
+#if TARGET_OS_MACOS
+#import <Cocoa/Cocoa.h>
+#elif TARGET_OS_IOS || TARGET_OS_TVOS
+#import <UIKit/UIKit.h>
+#endif
 
 #import "CLLocation+MMEMobileEvents.h"
 #import "CLLocationManager+MMEMobileEvents.h"
@@ -469,8 +474,50 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(eventsManager:didEncounterError:)]) {
         [self.delegate eventsManager:self didEncounterError:eventsError];
     }
-    else { // debug log?
 
+    NSMutableDictionary *crashAttributes = @{
+        MMEEventKeyEvent: MMEEventMobileCrash,
+        MMEEventKeyBuildType: (DEBUG ? @"debug" : @"release"),
+        MMEEventKeyIsSilentCrash: @"yes"
+    }.mutableCopy;
+
+    crashAttributes[MMEEventSDKIdentifier] = [NSString stringWithFormat:@"%@-%@", self.userAgentBase, self.hostSDKVersion];
+
+    if (NSProcessInfo.processInfo.operatingSystemVersionString) {
+        crashAttributes[MMEEventKeyOSVersion] = NSProcessInfo.processInfo.operatingSystemVersionString;
+    }
+
+#if TARGET_OS_MACOS
+    if (NSRunningApplication.currentApplicaiton.launchDate) {
+        crashAttributes[MMEEventKeyAppStartDate] = [MMEDate.iso8601DateFormatter stringFromDate:NSRunningApplication.currentApplicaiton.launchDate];
+    }
+#endif
+
+    /*        MMEEventKeyAppID: @"appId",
+        MMEEventKeyAppVersion: @"appVersion",
+        MMEEventKeyAppStartDate: @"appStartDate"
+
+        MMEEventSDKIdentifier: @"sdkIdentifier",
+
+        MMEEventKeyDevice: @"device",
+        MMEEventKeyModel: @"model",
+
+        MMEEventKeyStackTrace: @"stackTrace",
+        MMEEventKeyStackTraceHash: @"stackTraceHash",
+        MMEEventKeyThreadDetails: @"threadDetails",
+
+        MMEEventKeyInstallationID: @"installationID"
+    */
+
+    // create a mobile.crash report
+    NSError *eventError = nil;
+    MMEEvent *crashEvent = [MMEEvent eventWithAttributes:crashAttributes error:&eventError];
+
+    if (crashEvent) {
+        [self pushEvent:crashEvent];
+    }
+    else {
+        [self pushEvent:[MMEEvent debugEventWithError:eventError]];
     }
 }
 
@@ -479,7 +526,7 @@
         MMEErrorDescriptionKey: @"Exception Reported",
         MMEErrorUnderlyingExceptionKey: exception
     }];
-    
+
     [self reportError:exceptionalError];
 }
 
