@@ -40,6 +40,16 @@ using namespace Cedar::Doubles::Arguments;
 
 @end
 
+#pragma mark -
+
+@interface MMEEvent (Tests)
+@property(nonatomic,retain) MMEDate *dateStorage;
+@property(nonatomic,retain) NSDictionary *attributesStorage;
+
+@end
+
+#pragma mark -
+
 static CLLocation * location() {
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(10, 10);
     CLLocationDistance altitude = 100;
@@ -56,6 +66,8 @@ static CLLocation * location() {
                                             speed:speed
                                         timestamp:timestamp];
 }
+
+#pragma mark -
 
 SPEC_BEGIN(MMEEventsManagerSpec)
 
@@ -363,7 +375,6 @@ describe(@"MMEEventsManager", ^{
                             it(@"should attempt to post telemetryMetrics event", ^{
                                 eventsManager.apiClient should have_received(@selector(postEvents:completionHandler:)).with(@[telemetryMetricsEvent]).and_with(Arguments::anything);
                             });
-                            
                         });
                         
                         context(@"when no additional location events are received but the time threshold is reached", ^{
@@ -833,7 +844,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent mapTapEventWithDateString:dateString attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = event.dateStorage;
 
                     event should equal(expectedEvent);
                 });
@@ -847,7 +858,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent mapDragEndEventWithDateString:dateString attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = [MMEDate dateWithDate:event.date];
 
                     event should equal(expectedEvent);
                 });
@@ -861,7 +872,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent mapOfflineDownloadStartEventWithDateString:dateString attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = [MMEDate dateWithDate:event.date];
 
                     event should equal(expectedEvent);
                 });
@@ -875,7 +886,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent mapOfflineDownloadEndEventWithDateString:dateString attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = [MMEDate dateWithDate:event.date];
 
                     event should equal(expectedEvent);
                 });
@@ -891,7 +902,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent navigationEventWithName:navigationEventName attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = event.dateStorage;
 
                     event should equal(expectedEvent);
                 });
@@ -907,7 +918,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent visionEventWithName:visionEventName attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = event.dateStorage;
 
                     event should equal(expectedEvent);
                 });
@@ -923,7 +934,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent searchEventWithName:searchEventName attributes:attributes];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = event.dateStorage;
 
                     event should equal(expectedEvent);
                 });
@@ -971,7 +982,7 @@ describe(@"MMEEventsManager", ^{
                 it(@"has the correct event", ^{
                     MMEEvent *expectedEvent = [MMEEvent mapLoadEventWithDateString:dateString commonEventData:commonEventData];
                     MMEEvent *event = eventsManager.eventQueue.firstObject;
-                    // expectedEvent.date = event.date;
+                    expectedEvent.dateStorage = event.dateStorage;
 
                     event should equal(expectedEvent);
                 });
@@ -1058,12 +1069,12 @@ describe(@"MMEEventsManager", ^{
                 MMEEvent *expectedVisitEvent = [MMEEvent visitEventWithAttributes:attributes];
                 MMEEvent *enqueueEvent = eventsManager.eventQueue.firstObject;
 
-                // expectedVisitEvent.date = enqueueEvent.date;
+                expectedVisitEvent.dateStorage = enqueueEvent.dateStorage;
 
                 NSMutableDictionary *tempDict = [[NSMutableDictionary alloc] init];
                 [tempDict addEntriesFromDictionary:enqueueEvent.attributes];
                 [tempDict setObject:[MMEDate.iso8601DateFormatter stringFromDate:[location timestamp]] forKey:@"created"];
-                // enqueueEvent.attributes = tempDict;
+                enqueueEvent.attributesStorage = tempDict;
                 
                 enqueueEvent should equal(expectedVisitEvent);
             });

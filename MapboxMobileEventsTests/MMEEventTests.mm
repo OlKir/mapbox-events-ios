@@ -28,8 +28,12 @@ describe(@"MMEEvent", ^{
             event.name should equal(testName);
         });
 
-        it(@"should have the test event attrs", ^{
-            event.attributes should equal(testAttrs);
+        it(@"should have all the test event attrs", ^{
+            for (NSString *key in testAttrs.allKeys) {
+                id value = event.attributes[key];
+                value should_not be_nil;
+                testAttrs[key] should equal(value);
+            }
         });
     });
 
