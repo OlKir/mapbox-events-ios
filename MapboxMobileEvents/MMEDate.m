@@ -62,15 +62,19 @@ static NSTimeInterval _timeOffsetFromServer = 0.0; // TODO maintain a list of MM
     return _logDateFormatter;
 }
 
-/*! @brief returns a date with the recordedTimeOffsetFromServer */
 + (MMEDate *)dateWithRecordedOffset {
     return [MMEDate dateWithOffset:MMEDate.recordedTimeOffsetFromServer];
 }
 
-/*! @brief returns a date with the specified timeOffsetFromServer */
 + (MMEDate *)dateWithOffset:(NSTimeInterval)serverTimeFrame {
     return [MMEDate.alloc initWithOffset:serverTimeFrame];
 }
+
++ (MMEDate *)dateWithDate:(NSDate *)date {
+    return [MMEDate.alloc initWithTimeIntervalSinceReferenceDate:date.timeIntervalSinceReferenceDate
+                                                          offset:self.recordedTimeOffsetFromServer];
+}
+
 
 #pragma mark - NSDate Overrides
 
