@@ -269,11 +269,10 @@ exit:
         return NO;
     }
     
-    BOOL hasEqualName = [self.name isEqualToString:event.name];
-    BOOL hasEqualDate = (self.date.timeIntervalSinceReferenceDate == event.date.timeIntervalSinceReferenceDate);
-    BOOL hasEqualAttributes = [self.attributes isEqual:event.attributes];
+    BOOL hasEqualDate = (self.dateStorage.timeIntervalSinceReferenceDate == event.dateStorage.timeIntervalSinceReferenceDate);
+    BOOL hasEqualAttributes = [self.attributesStorage isEqual:event.attributesStorage];
     
-    return (hasEqualName && hasEqualDate && hasEqualAttributes);
+    return (hasEqualDate && hasEqualAttributes);
 }
 
 #pragma mark - NSObject overrides
