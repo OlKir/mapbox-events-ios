@@ -403,11 +403,11 @@
 				9C6322632213530A00653792 /* readme.md */,
 				404807BB1EA186D8008A6D50 /* MapboxMobileEvents */,
 				404807C61EA186D8008A6D50 /* MapboxMobileEventsTests */,
-				408596701ED08FF7003BD29D /* resources */,
 				9C65A2672256C110006E3FED /* MMETestHost */,
 				4032F47C1F1FEDC6001C1FBD /* Frameworks */,
 				9C6D9882221F37A200679292 /* Packaging */,
 				404807BA1EA186D8008A6D50 /* Products */,
+				408596701ED08FF7003BD29D /* resources */,
 				9C65A2842257289A006E3FED /* scripts */,
 			);
 			sourceTree = "<group>";
@@ -427,35 +427,35 @@
 		404807BB1EA186D8008A6D50 /* MapboxMobileEvents */ = {
 			isa = PBXGroup;
 			children = (
-				404807BD1EA186D8008A6D50 /* Info.plist */,
 				404807BC1EA186D8008A6D50 /* MapboxMobileEvents.h */,
-				40AE584C1EA926710046B437 /* MMETypes.h */,
 				40AE586F1EAA87960046B437 /* MMEAPIClient.h */,
-				40AE58701EAA87960046B437 /* MMEAPIClient.m */,
 				AC2C7162211241CC004179E0 /* MMEConfigurator.h */,
-				AC2C7161211241CB004179E0 /* MMEConfigurator.m */,
 				40AE58541EA932DB0046B437 /* MMEConstants.h */,
-				40AE58551EA932DB0046B437 /* MMEConstants.m */,
 				40AE586B1EA95EDD0046B437 /* MMEEvent.h */,
-				40AE586C1EA95EDD0046B437 /* MMEEvent.m */,
 				4036EFBC1ED37D56009C40BA /* MMEEventLogger.h */,
-				4036EFBD1ED37D56009C40BA /* MMEEventLogger.m */,
 				AC611F251FCDED2F00ABBF6D /* MMEEventLogReportViewController.h */,
-				AC611F261FCDED2F00ABBF6D /* MMEEventLogReportViewController.m */,
 				40FB43751EF9EA7800EC5BC0 /* MMEEventsConfiguration.h */,
-				40FB43761EF9EA7800EC5BC0 /* MMEEventsConfiguration.m */,
 				40C9E2791EA542BC00744FE7 /* MMEEventsManager.h */,
-				40C9E27A1EA542BC00744FE7 /* MMEEventsManager.m */,
 				40C9E27D1EA5473F00744FE7 /* MMELocationManager.h */,
-				40C9E27E1EA5473F00744FE7 /* MMELocationManager.m */,
 				AC86FE1B2169250000D1B89C /* MMEMetricsManager.h */,
-				AC86FE1C2169250000D1B89C /* MMEMetricsManager.m */,
 				40834B9E1FDF62C900C1BD0D /* MMENamespacedDependencies.h */,
 				40FB437A1EFAFAE900EC5BC0 /* MMETimerManager.h */,
+				40AE584C1EA926710046B437 /* MMETypes.h */,
+				40AE58701EAA87960046B437 /* MMEAPIClient.m */,
+				AC2C7161211241CB004179E0 /* MMEConfigurator.m */,
+				40AE58551EA932DB0046B437 /* MMEConstants.m */,
+				40AE586C1EA95EDD0046B437 /* MMEEvent.m */,
+				4036EFBD1ED37D56009C40BA /* MMEEventLogger.m */,
+				AC611F261FCDED2F00ABBF6D /* MMEEventLogReportViewController.m */,
+				40FB43761EF9EA7800EC5BC0 /* MMEEventsConfiguration.m */,
+				40C9E27A1EA542BC00744FE7 /* MMEEventsManager.m */,
+				40C9E27E1EA5473F00744FE7 /* MMELocationManager.m */,
+				AC86FE1C2169250000D1B89C /* MMEMetricsManager.m */,
 				40FB437B1EFAFAE900EC5BC0 /* MMETimerManager.m */,
+				404807BD1EA186D8008A6D50 /* Info.plist */,
 				40AE58601EA94E4A0046B437 /* Categories */,
-				40C9E2841EA5615900744FE7 /* Utilities */,
 				40F16C931F04514100DF338D /* Reachability */,
+				40C9E2841EA5615900744FE7 /* Utilities */,
 			);
 			path = MapboxMobileEvents;
 			sourceTree = "<group>";
@@ -463,7 +463,7 @@
 		404807C61EA186D8008A6D50 /* MapboxMobileEventsTests */ = {
 			isa = PBXGroup;
 			children = (
-				404807C91EA186D8008A6D50 /* Info.plist */,
+				40FB437F1EFAFDCF00EC5BC0 /* MMETimerManagerTests.m */,
 				CF870EA12254A93200959A65 /* MMEAPIClientCertPinTests.mm */,
 				ACD86D9F1F96A77700DD2A8D /* MMEAPIClientTests.mm */,
 				CF93A66222488A4500BBA199 /* MMECertPinTests.mm */,
@@ -474,8 +474,8 @@
 				9C6D98A322371DA400679292 /* MMEEventTests.mm */,
 				ACB6F21D1F7BF71B0032A916 /* MMELocationManagerTests.mm */,
 				AC61FA08216BE7A0008519F5 /* MMEMetricsManager.mm */,
-				40FB437F1EFAFDCF00EC5BC0 /* MMETimerManagerTests.m */,
 				40A7F9951F79A7CA002B931F /* MMEUniqueIdentifierTests.mm */,
+				404807C91EA186D8008A6D50 /* Info.plist */,
 				9C65A25B2256BB9A006E3FED /* Certs */,
 				40C9E28B1EA5762F00744FE7 /* Fakes */,
 				40AE58481EA80E5E0046B437 /* Utilities */,
@@ -551,6 +551,8 @@
 			children = (
 				4036EFB91ED36F06009C40BA /* MMEAPIClientFake.h */,
 				4036EFBA1ED36F06009C40BA /* MMEAPIClientFake.m */,
+				9C65A28F2267AF34006E3FED /* MMEDateFakes.h */,
+				9C65A2902267AF34006E3FED /* MMEDateFakes.m */,
 				ACA65F3A2135C67F00537748 /* MMEDispatchManagerFake.h */,
 				ACA65F392135C67E00537748 /* MMEDispatchManagerFake.m */,
 				40F16C7C1F01DF5700DF338D /* MMELocationManagerFake.h */,
@@ -563,8 +565,6 @@
 				40AE58461EA6C9F10046B437 /* MMEUIApplicationWrapperFake.m */,
 				40031E5C1EFC5CA1009EAB33 /* MMEUniqueIdentifierFake.h */,
 				40031E5D1EFC5CA1009EAB33 /* MMEUniqueIdentifierFake.m */,
-				9C65A28F2267AF34006E3FED /* MMEDateFakes.h */,
-				9C65A2902267AF34006E3FED /* MMEDateFakes.m */,
 			);
 			name = Fakes;
 			sourceTree = "<group>";
@@ -594,11 +594,11 @@
 				9C65A27C2256C175006E3FED /* MMETestHost.entitlements */,
 				9C65A2682256C110006E3FED /* AppDelegate.h */,
 				9C65A2692256C110006E3FED /* AppDelegate.m */,
-				9C65A26E2256C110006E3FED /* Main.storyboard */,
+				9C65A2772256C112006E3FED /* main.m */,
+				9C65A2762256C112006E3FED /* Info.plist */,
 				9C65A2712256C112006E3FED /* Assets.xcassets */,
 				9C65A2732256C112006E3FED /* LaunchScreen.storyboard */,
-				9C65A2762256C112006E3FED /* Info.plist */,
-				9C65A2772256C112006E3FED /* main.m */,
+				9C65A26E2256C110006E3FED /* Main.storyboard */,
 			);
 			path = MMETestHost;
 			sourceTree = "<group>";
@@ -606,10 +606,10 @@
 		9C65A2842257289A006E3FED /* scripts */ = {
 			isa = PBXGroup;
 			children = (
-				9C65A2852257289A006E3FED /* check_binary_size.sh */,
-				9C65A2862257289A006E3FED /* publish_to_aws.sh */,
-				9C65A2872257289A006E3FED /* package.sh */,
 				9C65A2882257289A006E3FED /* publish_to_sizechecker.js */,
+				9C65A2852257289A006E3FED /* check_binary_size.sh */,
+				9C65A2872257289A006E3FED /* package.sh */,
+				9C65A2862257289A006E3FED /* publish_to_aws.sh */,
 			);
 			path = scripts;
 			sourceTree = "<group>";
@@ -618,12 +618,12 @@
 			isa = PBXGroup;
 			children = (
 				402F02A41F7DA28700E7FF06 /* Cartfile */,
+				9C6322622213530A00653792 /* Makefile */,
+				404C5E221F85809400C026DD /* Scanfile */,
+				9C6D9883221F37FA00679292 /* package.json */,
+				402F02A51F7DA28700E7FF06 /* MapboxMobileEvents.podspec */,
 				9C6D9881221F369000679292 /* Cartfile.private */,
 				9C6D9884221F37FA00679292 /* codecov.yml */,
-				9C6322622213530A00653792 /* Makefile */,
-				402F02A51F7DA28700E7FF06 /* MapboxMobileEvents.podspec */,
-				9C6D9883221F37FA00679292 /* package.json */,
-				404C5E221F85809400C026DD /* Scanfile */,
 			);
 			name = Packaging;
 			sourceTree = "<group>";
