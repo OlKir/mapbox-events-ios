@@ -113,6 +113,7 @@
 		9C65A28B225D41F2006E3FED /* UIKit+MMEMobileEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C65A289225D41F2006E3FED /* UIKit+MMEMobileEvents.h */; };
 		9C65A28C225D41F2006E3FED /* UIKit+MMEMobileEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */; };
 		9C65A28D225D41F2006E3FED /* UIKit+MMEMobileEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */; };
+		9C65A2912267AF34006E3FED /* MMEDateFakes.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C65A2902267AF34006E3FED /* MMEDateFakes.m */; };
 		9C6D98A622371DA400679292 /* MMEEventTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D98A322371DA400679292 /* MMEEventTests.mm */; };
 		9C6D98A722371DA400679292 /* MMEEventsConfigurationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C6D98A422371DA400679292 /* MMEEventsConfigurationTests.mm */; };
 		AC1B091122137BB000DB56C8 /* CLLocationManager+MMEMobileEvents.h in Headers */ = {isa = PBXBuildFile; fileRef = AC1B090F22137BB000DB56C8 /* CLLocationManager+MMEMobileEvents.h */; };
@@ -311,6 +312,8 @@
 		9C65A2882257289A006E3FED /* publish_to_sizechecker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = publish_to_sizechecker.js; sourceTree = "<group>"; };
 		9C65A289225D41F2006E3FED /* UIKit+MMEMobileEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIKit+MMEMobileEvents.h"; path = "Reachability/UIKit+MMEMobileEvents.h"; sourceTree = "<group>"; };
 		9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIKit+MMEMobileEvents.m"; path = "Reachability/UIKit+MMEMobileEvents.m"; sourceTree = "<group>"; };
+		9C65A28F2267AF34006E3FED /* MMEDateFakes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMEDateFakes.h; sourceTree = "<group>"; };
+		9C65A2902267AF34006E3FED /* MMEDateFakes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMEDateFakes.m; sourceTree = "<group>"; };
 		9C6D9881221F369000679292 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
 		9C6D9883221F37FA00679292 /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		9C6D9884221F37FA00679292 /* codecov.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = codecov.yml; sourceTree = "<group>"; };
@@ -560,6 +563,8 @@
 				40AE58461EA6C9F10046B437 /* MMEUIApplicationWrapperFake.m */,
 				40031E5C1EFC5CA1009EAB33 /* MMEUniqueIdentifierFake.h */,
 				40031E5D1EFC5CA1009EAB33 /* MMEUniqueIdentifierFake.m */,
+				9C65A28F2267AF34006E3FED /* MMEDateFakes.h */,
+				9C65A2902267AF34006E3FED /* MMEDateFakes.m */,
 			);
 			name = Fakes;
 			sourceTree = "<group>";
@@ -926,6 +931,7 @@
 				AC61FA09216BE7A0008519F5 /* MMEMetricsManager.mm in Sources */,
 				40AE58471EA6C9F10046B437 /* MMEUIApplicationWrapperFake.m in Sources */,
 				403834FF1F7AC55D004205B9 /* MMEDateTests.mm in Sources */,
+				9C65A2912267AF34006E3FED /* MMEDateFakes.m in Sources */,
 				40AE584B1EA80EA90046B437 /* MMETestStub.m in Sources */,
 				40FB43801EFAFDCF00EC5BC0 /* MMETimerManagerTests.m in Sources */,
 				CF93A66322488A4500BBA199 /* MMECertPinTests.mm in Sources */,

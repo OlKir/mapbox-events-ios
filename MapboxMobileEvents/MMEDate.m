@@ -79,7 +79,7 @@ static NSTimeInterval _timeOffsetFromServer = 0.0; // TODO maintain a list of MM
 #pragma mark - NSDate Overrides
 
 + (instancetype) date {
-    return [MMEDate new];
+    return [self.class new];
 }
 
 #pragma mark - NSSecureCoding
@@ -123,6 +123,24 @@ static NSTimeInterval _timeOffsetFromServer = 0.0; // TODO maintain a list of MM
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@ sinceReference=%f, offsetFromServer=%f>", NSStringFromClass(self.class), _sinceReferenceDate, _offsetFromServer];
+}
+
+- (BOOL) isEqual:(id)object {
+    BOOL isEqual = NO;
+    
+    if ([object isKindOfClass:MMEDate.class]) {
+        if ([self isEqualToDate:(NSDate *)object]) {
+            isEqual = (self.offsetFromServer == ((MMEDate *) object).offsetFromServer);
+        }
+    }
+    else if ([object isKindOfClass:NSDate.class]) {
+        isEqual = [self isEqualToDate:(NSDate *)object];
+    }
+    else {
+        isEqual = [super isEqual:object];
+    }
+
+    return isEqual;
 }
 
 #pragma mark - NSCopying

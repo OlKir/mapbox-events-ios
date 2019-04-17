@@ -16,6 +16,7 @@
 #import "CLLocationManager+MMEMobileEvents.h"
 #import "MMEUIApplicationWrapper.h"
 #import "MMEMetricsManager.h"
+#import "MMEDateFakes.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -344,9 +345,12 @@ describe(@"MMEEventsManager", ^{
                                 MMEEvent *expectedEvent1 = [MMEEvent locationEventWithAttributes:eventAttributes
                                     instanceIdentifer:eventsManager.uniqueIdentifer.rollingInstanceIdentifer
                                     commonEventData:eventsManager.commonEventData];
+                                expectedEvent1.dateStorage = MMEDateFakes.earlier;
+
                                 MMEEvent *expectedEvent2 = [MMEEvent locationEventWithAttributes:eventAttributes
                                     instanceIdentifer:eventsManager.uniqueIdentifer.rollingInstanceIdentifer
                                     commonEventData:eventsManager.commonEventData];
+                                expectedEvent2.dateStorage = MMEDateFakes.earlier;
                                 
                                 eventsManager.apiClient should have_received(@selector(postEvents:completionHandler:)).with(@[expectedEvent1, expectedEvent2]).and_with(Arguments::anything);
                             });
@@ -400,6 +404,7 @@ describe(@"MMEEventsManager", ^{
                                 MMEEvent *expectedEvent1 = [MMEEvent locationEventWithAttributes:eventAttributes
                                     instanceIdentifer:eventsManager.uniqueIdentifer.rollingInstanceIdentifer
                                     commonEventData:eventsManager.commonEventData];
+                                expectedEvent1.dateStorage = MMEDateFakes.earlier;
                                 
                                 eventsManager.apiClient should have_received(@selector(postEvents:completionHandler:)).with(@[expectedEvent1]).and_with(Arguments::anything);
                             });
@@ -709,6 +714,7 @@ describe(@"MMEEventsManager", ^{
                                                                MMEEventKeyLocationAuthorization: [CLLocationManager mme_authorizationStatusString]
                                                                };
                     MMEEvent *expectedEvent = [MMEEvent turnstileEventWithAttributes:turnstileEventAttributes];
+                    expectedEvent.dateStorage = MMEDateFakes.earlier;
 
                     eventsManager.apiClient should have_received(@selector(postEvent:completionHandler:)).with(expectedEvent).and_with(Arguments::anything);
                 });

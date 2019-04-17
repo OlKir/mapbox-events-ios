@@ -269,7 +269,7 @@ exit:
         return NO;
     }
     
-    BOOL hasEqualDate = (self.dateStorage.timeIntervalSinceReferenceDate == event.dateStorage.timeIntervalSinceReferenceDate);
+    BOOL hasEqualDate = [self.dateStorage isEqualToDate:event.dateStorage];
     BOOL hasEqualAttributes = [self.attributesStorage isEqual:event.attributesStorage];
     
     return (hasEqualDate && hasEqualAttributes);
