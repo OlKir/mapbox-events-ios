@@ -310,8 +310,8 @@
 		9C65A2862257289A006E3FED /* publish_to_aws.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = publish_to_aws.sh; sourceTree = "<group>"; };
 		9C65A2872257289A006E3FED /* package.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = package.sh; sourceTree = "<group>"; };
 		9C65A2882257289A006E3FED /* publish_to_sizechecker.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = publish_to_sizechecker.js; sourceTree = "<group>"; };
-		9C65A289225D41F2006E3FED /* UIKit+MMEMobileEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UIKit+MMEMobileEvents.h"; path = "Reachability/UIKit+MMEMobileEvents.h"; sourceTree = "<group>"; };
-		9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIKit+MMEMobileEvents.m"; path = "Reachability/UIKit+MMEMobileEvents.m"; sourceTree = "<group>"; };
+		9C65A289225D41F2006E3FED /* UIKit+MMEMobileEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIKit+MMEMobileEvents.h"; sourceTree = "<group>"; };
+		9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIKit+MMEMobileEvents.m"; sourceTree = "<group>"; };
 		9C65A28F2267AF34006E3FED /* MMEDateFakes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMEDateFakes.h; sourceTree = "<group>"; };
 		9C65A2902267AF34006E3FED /* MMEDateFakes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMEDateFakes.m; sourceTree = "<group>"; };
 		9C6D9881221F369000679292 /* Cartfile.private */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.private; sourceTree = "<group>"; };
@@ -503,18 +503,18 @@
 		40AE58601EA94E4A0046B437 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				409115331F16BCD200F4250B /* MMECategoryLoader.h */,
+				409115341F16BCD200F4250B /* MMECategoryLoader.m */,
 				40AE58671EA953970046B437 /* CLLocation+MMEMobileEvents.h */,
 				40AE58681EA953970046B437 /* CLLocation+MMEMobileEvents.m */,
 				AC1B090F22137BB000DB56C8 /* CLLocationManager+MMEMobileEvents.h */,
 				AC1B091022137BB000DB56C8 /* CLLocationManager+MMEMobileEvents.m */,
-				409115331F16BCD200F4250B /* MMECategoryLoader.h */,
-				409115341F16BCD200F4250B /* MMECategoryLoader.m */,
 				40F133521F20051E007B4096 /* NSData+MMEGZIP.h */,
 				40F133511F20051E007B4096 /* NSData+MMEGZIP.m */,
 				9C65A289225D41F2006E3FED /* UIKit+MMEMobileEvents.h */,
 				9C65A28A225D41F2006E3FED /* UIKit+MMEMobileEvents.m */,
 			);
-			name = Categories;
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		40C9E2841EA5615900744FE7 /* Utilities */ = {
