@@ -76,13 +76,13 @@
     @note please use eventWithAttributes:error:
 */
 + (instancetype)locationEventWithAttributes:(NSDictionary *)attributes instanceIdentifer:(NSString *)instanceIdentifer commonEventData:(MMECommonEventData *)commonEventData
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note replacment TBD
 */
 + (instancetype)mapLoadEventWithDateString:(NSString *)dateString commonEventData:(MMECommonEventData *)commonEventData
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 #pragma mark - Deprecated (Event Name)
 
@@ -90,31 +90,31 @@
     @note please use eventWithAttributes:error:
 */
 + (instancetype)eventWithName:(NSString *)eventName attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithAttributes:error:
 */
 + (instancetype)navigationEventWithName:(NSString *)name attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithAttributes:error:
 */
 + (instancetype)visionEventWithName:(NSString *)name attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithAttributes:error:
 */
 + (instancetype)searchEventWithName:(NSString *)name attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithAttributes:error:
 */
 + (instancetype)carplayEventWithName:(NSString *)name attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 #pragma mark - Deprecated (Date String)
 
@@ -122,36 +122,36 @@
     @note please use eventWithName:attributes:
 */
 + (instancetype)telemetryMetricsEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithName:attributes:
 */
 + (instancetype)mapTapEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithName:attributes:
 */
 + (instancetype)mapDragEndEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithName:attributes:
 */
 + (instancetype)mapOfflineDownloadStartEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithName:attributes:
 */
 + (instancetype)mapOfflineDownloadEndEventWithDateString:(NSString *)dateString attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 /*! @brief deprecated in MabboxMobileEvents 1.0.0 or later
     @note please use eventWithName:attributes:
 */
 + (instancetype)eventWithDateString:(NSString *)dateString name:(NSString *)name attributes:(NSDictionary *)attributes
-    MBE_DEPRECATED_MSG("use eventWithAttributes:error:");
+    MME_DEPRECATED_MSG("use eventWithAttributes:error:");
 
 @end

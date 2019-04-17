@@ -60,11 +60,11 @@ extern NSString * const MMEEventKeyLongitude;
 extern NSString * const MMEEventKeyZoomLevel;
 extern NSString * const MMEEventKeyMaxZoomLevel;
 extern NSString * const MMEEventKeyMinZoomLevel;
-extern NSString * const MMEEventKeyGestureID;
+extern NSString * const MMEEventKeyGestureId;
 extern NSString * const MMEEventKeyEvent;
 extern NSString * const MMEEventKeyCreated;
 extern NSString * const MMEEventKeyStyleURL;
-extern NSString * const MMEEventKeyVendorID;
+extern NSString * const MMEEventKeyVendorId;
 extern NSString * const MMEEventKeyModel;
 extern NSString * const MMEEventKeyDevice;
 extern NSString * const MMEEventKeyEnabledTelemetry;
@@ -144,9 +144,9 @@ extern NSString * const MMEEventKeyBuildType;
 extern NSString * const MMEEventKeyIsSilentCrash;
 extern NSString * const MMEEventKeyStackTrace;
 extern NSString * const MMEEventKeyStackTraceHash;
-extern NSString * const MMEEventKeyInstallationID;
+extern NSString * const MMEEventKeyInstallationId;
 extern NSString * const MMEEventKeyThreadDetails;
-extern NSString * const MMEEventKeyAppID;
+extern NSString * const MMEEventKeyAppId;
 extern NSString * const MMEEventKeyAppVersion;
 extern NSString * const MMEEventKeyAppStartDate;
 extern NSString * const MMEEventKeyCustomData;
@@ -177,8 +177,13 @@ extern NSString * const MMEErrorEventAttributesKey;
 /*! @brief key for MMEErrorDomain userInfo dictionary containing the underlying exception which triggered the error */
 extern NSString * const MMEErrorUnderlyingExceptionKey;
 
-#pragma mark - Deprecated (HTML Logger)
+#pragma mark - Deprecated
 
-extern NSString * const MMELoggerHTML MBE_DEPRECATED;
-extern NSString * const MMELoggerShareableHTML MBE_DEPRECATED;
+extern NSString * const MMEEventKeyVendorID MME_DEPRECATED_MSG("Use MMEEventKeyVendorId");
+extern NSString * const MMEEventKeyGestureID MME_DEPRECATED_MSG("Use MMEEventKeyGestureId");
+extern NSString * const MMEEventKeyInstallationID MME_DEPRECATED_MSG("Use MMEEventKeyInstallationId");
+extern NSString * const MMEEventKeyAppID MME_DEPRECATED_MSG("Use MMEEventKeyInstallationId");
+
+extern NSString * const MMELoggerHTML MME_DEPRECATED;
+extern NSString * const MMELoggerShareableHTML MME_DEPRECATED;
 
