@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <MapboxMobileEvents/MMETypes.h>
+#import "MMETypes.h"
 
 extern NSString * const MMEAPIClientBaseURL;
 extern NSString * const MMEAPIClientBaseAPIURL;

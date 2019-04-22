@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import <MapboxMobileEvents/MMETypes.h>
+
+#import "MMETypes.h"
 
 @protocol MMEEventsManagerDelegate;
 
